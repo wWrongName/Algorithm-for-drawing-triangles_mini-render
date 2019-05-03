@@ -36,6 +36,6 @@ typedef struct RGB_pix {
 #pragma pack(pop)
 
 void line(RGB **image, RGB color, int x0, int y0, int x1, int y1);
-RGB color(char R, char G, char B);
+RGB color(unsigned char R, unsigned char G, unsigned char B);
 
 #endif
