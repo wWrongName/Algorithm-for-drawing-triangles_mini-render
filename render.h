@@ -29,9 +29,9 @@ typedef struct BMP {
 
 #pragma pack(push, 1)
 typedef struct RGB_pix {
-	char blue;
-	char green;
-	char red;
+	unsigned char blue;
+	unsigned char green;
+	unsigned char red;
 } RGB;
 #pragma pack(pop)
 
