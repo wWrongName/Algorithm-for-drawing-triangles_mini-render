@@ -4,7 +4,7 @@
 #include "render.h"
 #define SWAP(x,y) x=x^y; y=y^x; x=x^y; 
 
-RGB color(char R, char G, char B) {
+RGB color(unsigned char R, unsigned char G, unsigned char B) {
 	RGB clr_of_pix;
 	clr_of_pix.blue  = B;
 	clr_of_pix.green = G;
