@@ -2,7 +2,7 @@
 #define _RENDER_
 
 #pragma pack(push, 1)
-typedef struct {
+typedef struct {               //about BMP file header
 	unsigned short bi_file_type;
 	unsigned int bi_file_size;
 	unsigned short bi_file_res1;
@@ -11,8 +11,8 @@ typedef struct {
 } BMPFILEHEADER;
 #pragma pack(pop)
 
-#pragma pack(push, 1)
-typedef struct BMP {
+#pragma pack(push, 1)        
+typedef struct BMP {           //about BMP image
 	unsigned int bi_size;
 	int bi_width;
 	int bi_height;
@@ -28,14 +28,20 @@ typedef struct BMP {
 #pragma pack(pop)
 
 #pragma pack(push, 1)
-typedef struct RGB_pix {
+typedef struct RGB_pix {       //color of pixel
 	unsigned char blue;
 	unsigned char green;
 	unsigned char red;
 } RGB;
 #pragma pack(pop)
 
-void line(RGB **image, RGB color, int x0, int y0, int x1, int y1);
-RGB color(unsigned char R, unsigned char G, unsigned char B);
+typedef struct LINE_COORDS {   //store coordinates of line
+	int x0, y0;
+	int x1, y1;
+}C_VEC;
+
+C_VEC set_vector(int x0, int y0, int x1, int y1);
+RGB   set_color (unsigned char R, unsigned char G, unsigned char B);  
+void  line      (RGB **image, RGB color, C_VEC *l_vector);              //draw a line 
 
 #endif
