@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 	line(image, set_color(250, 0, 0), &l_vector[0]);
 	line(image, set_color(250, 0, 0), &l_vector[1]);
 
-	FILE *out = fopen("C:\\Users\\John\\Desktop\\input.bmp", "wb");
+	FILE *out = fopen("C:\\Users\\John\\Desktop\\input.bmp", "wb"); //any non-existent .BMP file
 	fwrite(&fh, sizeof(BMPFILEHEADER), 1, out);
 	fwrite(&ih, sizeof(BMPINFOHEADER), 1, out);
 	
