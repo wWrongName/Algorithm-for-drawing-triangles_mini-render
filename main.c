@@ -26,6 +26,11 @@ int main(int argc, char **argv)
 	ih.bi_clrs_used = 0;
 	ih.bi_clrs_imp = 0;
 
+	C_VEC *l_vector;
+	l_vector = (C_VEC*)malloc(sizeof(C_VEC)*2);
+	l_vector[0] = set_vector(100, 100, 1000, 1000);
+	l_vector[1] = set_vector(100, 1000, 1000, 100);
+
 	RGB **image;
 	image = (RGB**)malloc(ih.bi_height * sizeof(RGB*));
 	for (int i = 0; i < ih.bi_height; i++) {
@@ -34,11 +39,11 @@ int main(int argc, char **argv)
 
 	for (int i = 0; i < ih.bi_height; i++)
 		for (int j = 0; j < ih.bi_width; j++) {
-			image[i][j] = color(250, 250, 250);
+			image[i][j] = set_color(250, 250, 250);
 		}
 
-	line(image, color(250, 0, 0), 100, 100, 1000, 1000);
-	line(image, color(250, 0, 0), 100, 1000, 1000, 100);
+	line(image, set_color(250, 0, 0), &l_vector[0]);
+	line(image, set_color(250, 0, 0), &l_vector[1]);
 
 	FILE *out = fopen("C:\\Users\\John\\Desktop\\input.bmp", "wb");
 	fwrite(&fh, sizeof(BMPFILEHEADER), 1, out);
@@ -49,6 +54,5 @@ int main(int argc, char **argv)
 			fwrite(&image[i][j], sizeof(RGB), 1, out);
 		}
 	}
-
 	return 0;
 }
