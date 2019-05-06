@@ -22,28 +22,29 @@ C_VEC set_vector(int x0, int y0, int x1, int y1) {
 }
 
 void line(RGB **image, RGB color, C_VEC *l_vector) {
-	int delta_x = l_vector->x1 - l_vector->x0;
-	int delta_y = l_vector->y1 - l_vector->y0;
+	int delta_x = l_vector->x0 - l_vector->x1;
+	int delta_y = l_vector->y0 - l_vector->y1;
+	int x0 = l_vector->x0, y0 = l_vector->y0;
+	int x1 = l_vector->x1, y1 = l_vector->y1;
 	char rot = 0;
-	int y;
 
-	if (abs(delta_x) < abs(delta_y)){
-		SWAP(l_vector->x0, l_vector->y0);
-		SWAP(l_vector->x1, l_vector->y1);
+	if (abs(delta_x) < abs(delta_y)) {
+		SWAP(x0, y0);
+		SWAP(x1, y1);
 		rot = 1;
 	}
-
-	if (l_vector->x0 > l_vector->x1) {
-		SWAP(l_vector->x0, l_vector->x1);
-		SWAP(l_vector->y0, l_vector->y1);
+	if (x0 > x1) {
+		SWAP(x0, x1);
+		SWAP(y0, y1);
 	}
 
-	for (int x = l_vector->x0; x < l_vector->x1; x++) {
-		float k = (delta_y) / (float)(delta_x);
-		y = k * (x - l_vector->x0) + l_vector->y0;
+	for (int x = x0; x < x1; x++) {
+		float k = (x - x0) / (float)(x1 - x0);
+		int y = y0 * (1 - k) + y1 * k;
+
 		if (rot)
-			image[y][x] = color;
-		else 
 			image[x][y] = color;
+		else 
+			image[y][x] = color;
 	}
 }
