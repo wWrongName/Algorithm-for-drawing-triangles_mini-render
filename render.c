@@ -4,11 +4,19 @@
 #include "render.h"
 #define SWAP(x,y) x=x^y; y=y^x; x=x^y; 
 
+TRIANGLE set_triangle(COORD one, COORD two, COORD three) {
+	TRIANGLE out_triangle;
+	out_triangle.one   = one;
+	out_triangle.two   = two;
+	out_triangle.three = three;
+	return out_triangle;
+}
+
 COORD set_coord(int x, int y) {
-	COORD point;
-	point.x = x;
-	point.y = y;
-	return point;
+	COORD out_point;
+	out_point.x = x;
+	out_point.y = y;
+	return out_point;
 }
 
 RGB set_color(unsigned char R, unsigned char G, unsigned char B) {
@@ -28,7 +36,7 @@ C_VEC set_vector(COORD one, COORD two) {
 	return out_vector;
 }
 
-void line(RGB **image, RGB color, C_VEC l_vector) {
+void draw_line(RGB **image, RGB color, C_VEC l_vector) {
 
 	int delta_x = l_vector.two.x - l_vector.one.x;
 	int delta_y = l_vector.two.y - l_vector.one.y;
@@ -60,4 +68,10 @@ void line(RGB **image, RGB color, C_VEC l_vector) {
 			image[y][x] = color;
 		}
 	}
+}
+
+void draw_triangle(RGB **image, RGB color, TRIANGLE tgl) {
+	draw_line(image, color, set_vector(tgl.one, tgl.two));
+	draw_line(image, color, set_vector(tgl.two, tgl.three));
+	draw_line(image, color, set_vector(tgl.three, tgl.one));
 }
