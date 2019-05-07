@@ -4,6 +4,13 @@
 #include "render.h"
 #define SWAP(x,y) x=x^y; y=y^x; x=x^y; 
 
+COORD set_coord(int x, int y) {
+	COORD point;
+	point.x = x;
+	point.y = y;
+	return point;
+}
+
 RGB set_color(unsigned char R, unsigned char G, unsigned char B) {
 	RGB clr_of_pix;
 	clr_of_pix.blue  = B;
@@ -12,20 +19,21 @@ RGB set_color(unsigned char R, unsigned char G, unsigned char B) {
 	return clr_of_pix;
 }
 
-C_VEC set_vector(int x0, int y0, int x1, int y1) {
+C_VEC set_vector(COORD one, COORD two) {
 	C_VEC out_vector;
-	out_vector.x0 = x0;
-	out_vector.y0 = y0;
-	out_vector.x1 = x1;
-	out_vector.y1 = y1;
+	out_vector.one.x = one.x;
+	out_vector.one.y = one.y;
+	out_vector.two.x = two.x;
+	out_vector.two.y = two.y;
 	return out_vector;
 }
 
-void line(RGB **image, RGB color, C_VEC *l_vector) {
-	int delta_x = l_vector->x0 - l_vector->x1;
-	int delta_y = l_vector->y0 - l_vector->y1;
-	int x0 = l_vector->x0, y0 = l_vector->y0;
-	int x1 = l_vector->x1, y1 = l_vector->y1;
+void line(RGB **image, RGB color, C_VEC l_vector) {
+
+	int delta_x = l_vector.two.x - l_vector.one.x;
+	int delta_y = l_vector.two.y - l_vector.one.y;
+	int x0 = l_vector.one.x, y0 = l_vector.one.y;
+	int x1 = l_vector.two.x, y1 = l_vector.two.y;
 	char rot = 0;
 
 	if (abs(delta_x) < abs(delta_y)) {
@@ -39,12 +47,17 @@ void line(RGB **image, RGB color, C_VEC *l_vector) {
 	}
 
 	for (int x = x0; x < x1; x++) {
-		float k = (x - x0) / (float)(x1 - x0);
-		int y = y0 * (1 - k) + y1 * k;
-
-		if (rot)
+		float t;
+		int y;
+		if (rot) {
+			t = (float)(delta_x) / (float)(delta_y);
+			y = t * (x - x0) + y0;
 			image[x][y] = color;
-		else 
+		}
+		else {
+			t = (float)(delta_y) / (float)(delta_x);
+			y = t * (x - x0) + y0;
 			image[y][x] = color;
+		}
 	}
 }
