@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
 	draw_triangle(image, set_color(255,255,255), tgl);
 
-	FILE *out = fopen("C:\\Users\\John\\Desktop\\input.bmp", "wb");
+	FILE *out = fopen("*file path*", "wb");
 	fwrite(&fh, sizeof(BMPFILEHEADER), 1, out);
 	fwrite(&ih, sizeof(BMPINFOHEADER), 1, out);
 	
