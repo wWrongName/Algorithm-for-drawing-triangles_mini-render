@@ -52,7 +52,9 @@ typedef struct TRGL_COORDS{
 
 COORD set_coord(int x, int y);
 C_VEC set_vector(COORD one, COORD two);
-RGB   set_color (unsigned char R, unsigned char G, unsigned char B);  
-void  line      (RGB **image, RGB color, C_VEC l_vector);              //draw a line 
+TRIANGLE set_triangle(COORD one, COORD two, COORD three);
+RGB set_color(unsigned char R, unsigned char G, unsigned char B);  
+void draw_triangle(RGB **image, RGB color, TRIANGLE tgl);
+void draw_line(RGB **image, RGB color, C_VEC l_vector);  
 
 #endif
