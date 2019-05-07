@@ -35,13 +35,24 @@ typedef struct RGB_pix {       //color of pixel
 } RGB;
 #pragma pack(pop)
 
-typedef struct LINE_COORDS {   //store coordinates of line
-	int x0, y0;
-	int x1, y1;
-}C_VEC;
+typedef struct {
+	int x, y;
+} COORD;
 
-C_VEC set_vector(int x0, int y0, int x1, int y1);
+typedef struct LINE_COORDS {   //store coordinates of line
+	COORD one;
+	COORD two;
+} C_VEC;
+
+typedef struct TRGL_COORDS{
+	COORD one;
+	COORD two;
+	COORD three;
+} TRIANGLE;
+
+COORD set_coord(int x, int y);
+C_VEC set_vector(COORD one, COORD two);
 RGB   set_color (unsigned char R, unsigned char G, unsigned char B);  
-void  line      (RGB **image, RGB color, C_VEC *l_vector);              //draw a line 
+void  line      (RGB **image, RGB color, C_VEC l_vector);              //draw a line 
 
 #endif
