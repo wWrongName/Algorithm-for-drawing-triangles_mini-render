@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <cmath>
+#include <math.h>
 #include "render.h"
 #define SWAP(x,y) x=x^y; y=y^x; x=x^y; 
 
