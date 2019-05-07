@@ -26,12 +26,7 @@ int main(int argc, char **argv)
 	ih.bi_clrs_used = 0;
 	ih.bi_clrs_imp = 0;
 
-	C_VEC *l_vector;
-	l_vector = (C_VEC*)malloc(sizeof(C_VEC));
-	COORD coord1 = set_coord(2000, 100);
-	COORD coord2 = set_coord(100, 1000);
-	l_vector[0] = set_vector(coord1, coord2);
-
+	TRIANGLE tgl = set_triangle(set_coord(100, 100), set_coord(100, 1000), set_coord(1000, 1000));
 
 	RGB **image;
 	image = (RGB**)malloc(ih.bi_height * sizeof(RGB*));
@@ -44,7 +39,7 @@ int main(int argc, char **argv)
 			image[i][j] = set_color(0, 0, 0);
 		}
 
-	line(image, set_color(255, 255, 255), l_vector[0]);
+	draw_triangle(image, set_color(255,255,255), tgl);
 
 	FILE *out = fopen("C:\\Users\\John\\Desktop\\input.bmp", "wb");
 	fwrite(&fh, sizeof(BMPFILEHEADER), 1, out);
