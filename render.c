@@ -70,8 +70,60 @@ void draw_line(RGB **image, RGB color, C_VEC l_vector) {
 	}
 }
 
-void draw_triangle(RGB **image, RGB color, TRIANGLE tgl) {
-	draw_line(image, color, set_vector(tgl.one, tgl.two));
-	draw_line(image, color, set_vector(tgl.two, tgl.three));
-	draw_line(image, color, set_vector(tgl.three, tgl.one));
+void draw_outline_of_triangle(RGB **image, RGB color, TRIANGLE *tgl) {
+	draw_line(image, color, set_vector(tgl->one, tgl->two));
+	draw_line(image, color, set_vector(tgl->two, tgl->three));
+	draw_line(image, color, set_vector(tgl->three, tgl->one));
 }
+
+void draw_triangle(RGB **image, RGB color, TRIANGLE *tgl) {
+	tgl = sort_coords(tgl);
+	if (tgl->three.y == tgl->two.y) 
+		draw_plain_triangle(image, color, tgl);
+	else if (tgl->one.y == tgl->two.y) {
+		/////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	}
+	else {
+		//////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	}
+}
+
+TRIANGLE *sort_coords(TRIANGLE *tgl) {
+	if (tgl->one.y > tgl->two.y)
+		SWAP(tgl->one.y, tgl->two.y);
+	if (tgl->one.y > tgl->three.y)
+		SWAP(tgl->one.y, tgl->three.y);
+	if (tgl->two.y > tgl->three.y)
+		SWAP(tgl->two.y, tgl->three.y);
+	return tgl;
+}
+
+//this function get coordinates in the order (one - bottom, two and three - top)|
+//                                                                              |
+//             three-----------------------two            it's                  | 
+//                  \                     /               plain                 |
+//                   \                   /                triangle              | 
+//                    \                 /                                       |
+//                     \               /                                        |
+//                      \             /                                         |
+//                       \           /                                          |
+//                        \         /                                           |
+//                         \       /                                            |
+//                          \     /                                             | 
+//                           \   /                                              |
+//                            \ /                                               |
+//                            one                                               V
+//
+void draw_plain_triangle(RGB **image, RGB color, TRIANGLE *tgl) {
+	if (tgl->three.x > tgl->two.x)          // in order to make a pattern above
+		SWAP(tgl->two.x, tgl->three.x);     // swap vertex
+	float delta_left = (float)(tgl->three.y - tgl->one.y) / (float)(tgl->three.x - tgl->one.x);
+	float delta_right = (float)(tgl->two.y - tgl->one.y) / (float)(tgl->two.x - tgl->one.x);
+	for (int y = tgl->one.y; y <= tgl->three.y; y++) {
+		int x1 = (y - tgl->one.y) / delta_left  + tgl->one.x;
+		int x2 = (y - tgl->one.y) / delta_right + tgl->one.x;;
+		for ( ; x1 <= x2; x1++)
+			image[x1][y] = color;   //draw line between x1 and x2
+	}
+}
+//end of the function 
