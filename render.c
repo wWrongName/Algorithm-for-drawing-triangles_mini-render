@@ -101,7 +101,7 @@ TRIANGLE *sort_coords(TRIANGLE *tgl) {
 //this function get coordinates in the order (one - bottom, two and three - top)|
 //                                                                              |
 //             three-----------------------two            it's                  | 
-//                  \                     /               plain                 |
+//                  \                     /               "plain"               |
 //                   \                   /                triangle              | 
 //                    \                 /                                       |
 //                     \               /                                        |
