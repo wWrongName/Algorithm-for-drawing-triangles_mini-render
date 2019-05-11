@@ -4,11 +4,11 @@
 #include "render.h"
 #define SWAP(x,y) x=x^y; y=y^x; x=x^y; 
 
-TRIANGLE set_triangle(COORD one, COORD two, COORD three) {
-	TRIANGLE out_triangle;
-	out_triangle.one   = one;
-	out_triangle.two   = two;
-	out_triangle.three = three;
+TRIANGLE *set_triangle(COORD one, COORD two, COORD three) {
+	TRIANGLE *out_triangle = (TRIANGLE*)malloc(sizeof(TRIANGLE));
+	out_triangle->one   = one;
+	out_triangle->two   = two;
+	out_triangle->three = three;
 	return out_triangle;
 }
 
@@ -78,23 +78,36 @@ void draw_outline_of_triangle(RGB **image, RGB color, TRIANGLE *tgl) {
 
 void draw_triangle(RGB **image, RGB color, TRIANGLE *tgl) {
 	tgl = sort_coords(tgl);
-	if (tgl->three.y == tgl->two.y) 
-		draw_plain_triangle(image, color, tgl);
-	else if (tgl->one.y == tgl->two.y) {
-		/////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	if (tgl->three.y == tgl->two.y)                // if it's a "plain" triangle
+		draw_plain_triangle(image, color, tgl, 0);
+	else if (tgl->one.y == tgl->two.y) {           // if it's an overturned "plain" triangle
+		draw_plain_triangle(image, color, tgl, 1);
 	}
-	else {
-		//////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	else {										                                            // if it's a triangle with different "Y" coordinates of vertices 
+		float div = (float)(tgl->three.x - tgl->one.x) / (float)(tgl->three.y - tgl->one.y);// we must divide a triangle into two "plain" triangles
+		int mid_x = (tgl->two.y - tgl->one.y) * div + tgl->one.x;
+		draw_plain_triangle(image, color, set_triangle(tgl->one, tgl->two, set_coord(mid_x, tgl->two.y)), 0);
+		draw_plain_triangle(image, color, set_triangle(set_coord(mid_x, tgl->two.y), tgl->two, tgl->three), 1);
 	}
 }
 
 TRIANGLE *sort_coords(TRIANGLE *tgl) {
-	if (tgl->one.y > tgl->two.y)
-		SWAP(tgl->one.y, tgl->two.y);
-	if (tgl->one.y > tgl->three.y)
-		SWAP(tgl->one.y, tgl->three.y);
-	if (tgl->two.y > tgl->three.y)
-		SWAP(tgl->two.y, tgl->three.y);
+	COORD tmp;
+	if (tgl->one.y > tgl->two.y) {
+		tmp = tgl->one;
+		tgl->one = tgl->two;
+		tgl->two = tmp;
+	}
+	if (tgl->one.y > tgl->three.y) {
+		tmp = tgl->one;
+		tgl->one = tgl->three;
+		tgl->three = tmp;
+	}
+	if (tgl->two.y > tgl->three.y) {
+		tmp = tgl->two;
+		tgl->two = tgl->three;
+		tgl->three = tmp;
+	}
 	return tgl;
 }
 
@@ -114,16 +127,27 @@ TRIANGLE *sort_coords(TRIANGLE *tgl) {
 //                            \ /                                               |
 //                            one                                               V
 //
-void draw_plain_triangle(RGB **image, RGB color, TRIANGLE *tgl) {
-	if (tgl->three.x > tgl->two.x)          // in order to make a pattern above
-		SWAP(tgl->two.x, tgl->three.x);     // swap vertex
-	float delta_left = (float)(tgl->three.y - tgl->one.y) / (float)(tgl->three.x - tgl->one.x);
-	float delta_right = (float)(tgl->two.y - tgl->one.y) / (float)(tgl->two.x - tgl->one.x);
-	for (int y = tgl->one.y; y <= tgl->three.y; y++) {
-		int x1 = (y - tgl->one.y) / delta_left  + tgl->one.x;
-		int x2 = (y - tgl->one.y) / delta_right + tgl->one.x;;
-		for ( ; x1 <= x2; x1++)
-			image[x1][y] = color;   //draw line between x1 and x2
+void draw_plain_triangle(RGB **image, RGB color, TRIANGLE *tgl, char flip_f) {
+	if (flip_f == 1) {
+		SWAP(tgl->one.y, tgl->three.y);
+		tgl->two.y = tgl->one.y;
+		tgl = sort_coords(tgl);
+	}
+	float delta_left =  (float)(tgl->three.x - tgl->one.x) / (float)(tgl->three.y - tgl->one.y);
+	float delta_right = (float)(tgl->two.x - tgl->one.x) / (float)(tgl->two.y - tgl->one.y);
+	int last_y = tgl->three.y;
+	int back_ctr = -1;                 //for flip again
+	for (int y = tgl->one.y; y <= last_y; y++) {
+		back_ctr++;
+		int x1 = (y - tgl->one.y) * delta_left  + tgl->one.x;
+		int x2 = (y - tgl->one.y) * delta_right + tgl->one.x;;
+		for (; x1 <= x2; x1++) {
+			if (flip_f == 0)
+				image[y][x1] = color;  //draw line between x1 and x2
+			else {
+				int y_r = last_y - back_ctr;
+				image[y_r][x1] = color;// for reverse rotation
+			}
+		}
 	}
 }
-//end of the function 
