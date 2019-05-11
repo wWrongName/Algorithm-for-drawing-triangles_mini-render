@@ -26,7 +26,8 @@ int main(int argc, char **argv)
 	ih.bi_clrs_used = 0;
 	ih.bi_clrs_imp = 0;
 
-	TRIANGLE tgl = set_triangle(set_coord(100, 100), set_coord(100, 1000), set_coord(1000, 1000));
+	TRIANGLE tgl = *set_triangle(set_coord(100, 100), set_coord(100, 1000), set_coord(1000, 1000));
+	TRIANGLE tgl1 =*set_triangle(set_coord(2000, 500), set_coord(600, 800), set_coord(500, 10));
 
 	RGB **image;
 	image = (RGB**)malloc(ih.bi_height * sizeof(RGB*));
@@ -39,9 +40,10 @@ int main(int argc, char **argv)
 			image[i][j] = set_color(0, 0, 0);
 		}
 
-	draw_triangle(image, set_color(255,255,255), tgl);
+	draw_triangle(image, set_color(200, 200, 200), &tgl1);
+	draw_outline_of_triangle(image, set_color(0, 0, 255), &tgl);
 
-	FILE *out = fopen("*file path*", "wb");
+	FILE *out = fopen("C:\\Users\\John\\Desktop\\input.bmp", "wb");
 	fwrite(&fh, sizeof(BMPFILEHEADER), 1, out);
 	fwrite(&ih, sizeof(BMPINFOHEADER), 1, out);
 	
