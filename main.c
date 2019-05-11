@@ -26,8 +26,8 @@ int main(int argc, char **argv)
 	ih.bi_clrs_used = 0;
 	ih.bi_clrs_imp = 0;
 
-	TRIANGLE tgl = *set_triangle(set_coord(100, 100), set_coord(100, 1000), set_coord(1000, 1000));
-	TRIANGLE tgl1 =*set_triangle(set_coord(2000, 500), set_coord(600, 800), set_coord(500, 10));
+	TRIANGLE tgl = *set_triangle(set_coord(100, 100), set_coord(150, 1000), set_coord(1000, 1000));
+	TRIANGLE tgl1 =*set_triangle(set_coord(1000, 200), set_coord(1200, 800), set_coord(1800, 600));
 
 	RGB **image;
 	image = (RGB**)malloc(ih.bi_height * sizeof(RGB*));
@@ -52,5 +52,6 @@ int main(int argc, char **argv)
 			fwrite(&image[i][j], sizeof(RGB), 1, out);
 		}
 	}
+	fclose(out);
 	return 0;
 }
