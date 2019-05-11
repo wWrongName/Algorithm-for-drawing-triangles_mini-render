@@ -54,10 +54,10 @@ COORD set_coord(int x, int y);
 C_VEC set_vector(COORD one, COORD two);
 TRIANGLE *sort_coords(TRIANGLE *tgl);
 void draw_triangle(RGB **image, RGB color, TRIANGLE *tgl);
-TRIANGLE set_triangle(COORD one, COORD two, COORD three);
+TRIANGLE *set_triangle(COORD one, COORD two, COORD three);
 RGB set_color(unsigned char R, unsigned char G, unsigned char B);  
 void draw_outline_of_triangle(RGB **image, RGB color, TRIANGLE *tgl);
-void draw_plain_triangle(RGB **image, RGB color, TRIANGLE *tgl);
+void draw_plain_triangle(RGB **image, RGB color, TRIANGLE *tgl, char flip_f);
 void draw_line(RGB **image, RGB color, C_VEC l_vector);  
 
 #endif
