@@ -1,1 +1,1 @@
-Messy code, just for training
+Messy code, just for training. Poor optimization.
