@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 	ih.bi_clrs_imp = 0;
 
 	TRIANGLE tgl = *set_triangle(set_coord(100, 100), set_coord(150, 1000), set_coord(1000, 1000));
-	TRIANGLE tgl1 =*set_triangle(set_coord(1000, 200), set_coord(1200, 800), set_coord(1800, 600));
+	TRIANGLE tgl1 =*set_triangle(set_coord(1500,900), set_coord(1200, 100), set_coord(1800, 100));
 
 	RGB **image;
 	image = (RGB**)malloc(ih.bi_height * sizeof(RGB*));
