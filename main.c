@@ -52,6 +52,10 @@ int main(int argc, char **argv)
 			fwrite(&image[i][j], sizeof(RGB), 1, out);
 		}
 	}
+	for (int i = 0; i < ih.bi_height; i++) {
+		free(image[i]);
+	}
+	free(image);
 	fclose(out);
 	return 0;
 }
