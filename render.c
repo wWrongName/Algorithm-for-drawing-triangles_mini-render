@@ -3,6 +3,7 @@
 #include <math.h>
 #include "render.h"
 #define SWAP(x,y) x=x^y; y=y^x; x=x^y; 
+char for_free = 0;
 
 TRIANGLE *set_triangle(COORD one, COORD two, COORD three) {
 	TRIANGLE *out_triangle = (TRIANGLE*)malloc(sizeof(TRIANGLE));
@@ -86,8 +87,10 @@ void draw_triangle(RGB **image, RGB color, TRIANGLE *tgl) {
 	else {// if it's a triangle with different "Y" coordinates of vertices 
 		float div = (float)(tgl->three.x - tgl->one.x) / (float)(tgl->three.y - tgl->one.y);// we must divide a triangle into two "plain" triangles
 		int mid_x = (tgl->two.y - tgl->one.y) * div + tgl->one.x;
+		for_free = 1;
 		draw_plain_triangle(image, color, set_triangle(tgl->one, tgl->two, set_coord(mid_x, tgl->two.y)), 0);
 		draw_plain_triangle(image, color, set_triangle(set_coord(mid_x, tgl->two.y), tgl->two, tgl->three), 1);
+		for_free = 0;
 	}
 }
 
@@ -153,4 +156,6 @@ void draw_plain_triangle(RGB **image, RGB color, TRIANGLE *tgl, char flip_f) {
 			}
 		}
 	}
+	if (for_free)
+		free(tgl);
 }
