@@ -159,3 +159,38 @@ void draw_plain_triangle(RGB **image, RGB color, TRIANGLE *tgl, char flip_f) {
 	if (for_free)
 		free(tgl);
 }
+
+VERTEX *read_obj(FILE *in_obj) {
+	VERTEX *vertexes;
+	unsigned int counter = 0;
+	if (!in_obj)
+		return NULL;
+	int tmp;
+	while (!feof(tmp = fgetc(in_obj))) {
+		if (!strcmp(tmp, 'v') && !strcmp(tmp = fgetc(in_obj), ' ')) {
+			vertexes = (VERTEX*)realloc(vertexes, sizeof(VERTEX)*(++counter));
+			vertexes = read_vertex(in_obj, vertexes, counter);
+		}
+		else
+			break;
+	}
+	return vertexes;
+}
+
+VERTEX *read_vertex(FILE *in_obj, VERTEX *vertexes, unsigned int counter) {
+	int tmp;
+
+	vertexes[counter - 1].x = 0;
+	while (strcmp(tmp = fgetc(in_obj), ' '))
+		vertexes[counter - 1].x = vertexes[counter - 1].x * 10 + (tmp - '0');
+
+	vertexes[counter - 1].y = 0;
+	while (strcmp(tmp = fgetc(in_obj), ' '))
+		vertexes[counter - 1].y = vertexes[counter - 1].y * 10 + (tmp - '0');
+
+	vertexes[counter - 1].z = 0;
+	while (isdigit(tmp = fgetc(in_obj)))
+		vertexes[counter - 1].z = vertexes[counter - 1].z * 10 + (tmp - '0');
+
+	return vertexes;
+}
